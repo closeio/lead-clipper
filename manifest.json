@@ -1,0 +1,39 @@
+{
+    "manifest_version": 2,
+
+    "name": "Close.io Lead Clipper",
+    "description": "Clip contact data from ANY website and put it straight in your Close.io account.",
+    "version": "1.4.8",
+
+    "permissions": [
+        "webRequest",
+        "webRequestBlocking",
+        "tabs",
+        "cookies",
+        "https://*.close.io/",
+        "http://*.close.io/"
+    ],
+    "browser_action": {
+        "default_icon": "img/icon-available.png",
+        "default_title": "Close.io Lead Clipper"
+    },
+
+    "background": {
+        "page": "templates/background.html"
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "js/lib/jquery.js",
+                "js/contentscript.js"
+            ],
+            "matches": ["<all_urls>"],
+            "run_at": "document_end"
+        }
+    ],
+    "icons": {
+        "128": "img/icon-128px.png",
+        "16": "img/icon-16px.png",
+        "48": "img/icon-48px.png"
+    }
+}

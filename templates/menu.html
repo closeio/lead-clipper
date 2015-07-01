@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script type="text/javascript" src="../js/lib/jquery.js"></script>
+    <script type="text/javascript" src="../js/menu.js"></script>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">    
+    <link rel="stylesheet" href="../css/menu.css">    
+</head>
+
+<body tabindex="0">
+    <ul class="menu-list data">
+        <li class="top-bar">
+            <div class="profile-pic"></div>
+            <div class="full-name"></div>
+            <a href="#" class="sign-out">Sign Out</a>
+        </li>
+
+
+        <li class="lead-data menu-list">
+            <table>
+                <tr class="org-row">
+                    <td colspan="2" class="label org-label">Organization</td>
+                </tr>
+                <tr class="org-row">
+                    <td colspan="2">
+                        <select class="org-list"></select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="label">Contact</td>
+                </tr>
+
+                <tr>
+                    <th>Name</th>
+                    <td>
+                        <input name="contact_name" id="contact_name" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Title</th>
+                    <td>
+                        <input name="contact_title" id="contact_title" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Emails</th>
+                    <td class="emails item-list"></td>
+                </tr>
+                <tr>
+                    <th>Phones</th>
+                    <td class="phones item-list"></td>
+                </tr>
+                <tr>
+                    <th>URLs</th>
+                    <td class="urls item-list"></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="label">Lead</td>
+                </tr>
+
+                <tr>
+                    <th>Company Name</th>
+                    <td>
+                        <input name="name" id="name" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>URL</th>
+                    <td>
+                        <input name="url" id="url" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>
+                        <input name="description" id="description" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Address 1</th>
+                    <td>
+                        <input name="address_1" id="address_1" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Address 2</th>
+                    <td>
+                        <input name="address_2" id="address_2" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>City</th>
+                    <td>
+                        <input name="city" id="city" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>State</th>
+                    <td>
+                        <input name="state" id="state" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>ZIP</th>
+                    <td>
+                        <input name="zipcode" id="zipcode" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Country</th>
+                    <td>
+                        <input name="country" id="country" type="text" placeholder="Click to edit" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" class="label">Custom Fields</td>
+                </tr>
+                
+                <tr>
+                    <td colspan="2"><a class="add-custom">Add Custom Field</a></td>
+                </tr>
+
+            </table>
+        </li>
+        <li class="submit">
+            <div class="dupe-org-alert">
+                Warning! Lead from this webpage has been posted to this organization before.
+                <a href="#" class="dupe-lead-url" target="_blank">See it here</a>
+            </div>
+            <a href="#" class="save-lead btn btn-primary">Save Lead</a>
+        </li>
+    </ul>
+
+    <div class="overlay"></div>
+
+    <div class="post-success post-info">
+        The lead has been posted!
+        <a href="#" target="_blank" class="lead-url">View it here</a>
+    </div>
+
+    <div class="post-error post-info">
+        Lead could not be saved
+        <div class="validation-errors"></div>
+    </div>
+
+    <div class="trial-expired">
+        Sorry, your trial has expired.
+        <br/><br/>
+        Visit the <a href="https://app.close.io/home/" target="_blank">billing page</a> to upgrade your account.
+    </div>
+
+</body>
+</html>

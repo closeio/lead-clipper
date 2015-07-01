@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <script type="text/javascript" src="../js/lib/jquery.js"></script>
+    <script type="text/javascript" src="../js/sign_in.js"></script>
+    <link rel="stylesheet" href="../css/sign_in.css">    
+</head>
+
+<body>
+    <div class="navbar">
+        <a class="brand scroller" data-section="body" href="http://close.io/?utm_source=lead_clipper&utm_medium=lead_clipper&utm_campaign=extension" target="_blank">Close.io</a>
+        <a href="http://app.close.io/signup/?utm_source=lead_clipper&utm_medium=lead_clipper&utm_campaign=extension" title="Create an account" target="_blank" class="btn-signup">
+            Create an account
+        </a>
+    </div>
+
+    <div id="fux-container">
+      <p>
+          Manage contacts and track sales with <a href="http://close.io/?utm_source=chrome_ext&utm_medium=ext_text&utm_campaign=ext_c" title="Close.io" target="_blank">Close.io</a>.
+          The Lead Clipper allows you to grab contact information from literally any website and add it to your Close.io account.
+      </p>
+      
+      <h1 id="h1_text">Sign in to Close.io to get started.</h1>
+
+      <h1 id="loading">Loading...</h1>
+
+      <div id="error" style="display: none;">Please provide valid credentials.</div>
+
+      <form id="login_form" accept-charset="UTF-8"<fieldset>
+        
+          <fieldset>
+          
+            <div class="field">
+                <input class="regularField" id="user_email" name="email" type="text" value="" placeholder="Email" />
+            </div>
+
+            <div class="field">
+                <input class="regularField" id="user_password" name="password" type="password" value="" placeholder="Password" />
+            </div>
+          
+            <div id="submit">
+                <button type="submit">Sign In</button>
+            </div>
+          
+          </fieldset>
+      </form>
+
+    <br />
+
+    <div id="success" style="display: none;">You have been successfully signed in.</div>
+
+    </div>
+</body>
+</html>

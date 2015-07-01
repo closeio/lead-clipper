@@ -1,0 +1,45 @@
+# Grunt stuff
+node_modules/
+dist/
+
+# Chrome package
+dist.zip
+*.crx
+*.pem
+
+# Compiled static asset stuff
+.webassets-cache
+.webassets-manifest.json
+
+dump.rdb
+
+# Packages
+*.egg
+*.egg-info
+eggs
+parts
+var
+sdist
+develop-eggs
+.installed.cfg
+
+# Installer logs
+build/
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+
+#Translations
+*.mo
+
+#Mr Developer
+.mr.developer.cfg
+
+# Vim
+*.swp
+
+# Finder
+.DS_Store
+
