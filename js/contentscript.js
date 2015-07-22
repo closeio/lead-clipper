@@ -31,6 +31,9 @@ String.prototype.reverse = function() {
     return this.split("").reverse().join("");
 };
 
+
+// Taken from http://rosskendall.com/files/rfc822validemail.js.txt
+// under a Creative Commons Attribution-ShareAlike 2.5 License
 function isRFC822ValidEmail(sEmail) {
     var sQtext = '[^\\x0d\\x22\\x5c\\x80-\\xff]';
     var sDtext = '[^\\x0d\\x5b-\\x5d\\x80-\\xff]';
@@ -55,6 +58,7 @@ function isRFC822ValidEmail(sEmail) {
     return false;
 }
 
+// Taken from http://www.kevinleary.net/jquery-parse-url/
 function getQueryParam(href, query) {
     query = query.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var expr = "[\\?&]"+query+"=([^&#]*)";
