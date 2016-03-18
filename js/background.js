@@ -207,7 +207,6 @@ CIOClipper.Main = function() {
                         }
                         if (!found) {
                             details.requestHeaders.push({ name: name, value: value });
-                            return  { requestHeaders: details.requestHeaders };
                         }
                     };
                     setHeader('Referer', CIOClipper.Settings.appUrl);
