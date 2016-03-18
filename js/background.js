@@ -193,23 +193,26 @@ CIOClipper.Main = function() {
     return {
         init: function() {
 
-            // Modify the Referer for every request (hack to avoid CORS)
+            // Modify the Referer (to avoid CORS) and Origin (to properly validate the CSRF token)
             chrome.webRequest.onBeforeSendHeaders.addListener(
                 function(details) {
-                    var refererFound = false;
-                    for (var i = 0; i < details.requestHeaders.length; ++i) {
-                        if (details.requestHeaders[i].name === 'Referer') {
-                            refererFound = true;
-                            details.requestHeaders[i].value = 'https://app.close.io';
-                            break;
+                    var setHeader = function(name, value) {
+                        var found = false;
+                        for (var i = 0; i < details.requestHeaders.length; i++) {
+                            if (details.requestHeaders[i].name === name) {
+                                found = true;
+                                details.requestHeaders[i].value = value;
+                                break;
+                            }
                         }
-                    }
-                    if (refererFound) {
-                        return {requestHeaders: details.requestHeaders};
-                    } else {
-                        details.requestHeaders.push({ name: 'Referer', value: 'https://app.close.io' });
-                        return  {requestHeaders: details.requestHeaders};
-                    }
+                        if (!found) {
+                            details.requestHeaders.push({ name: name, value: value });
+                            return  { requestHeaders: details.requestHeaders };
+                        }
+                    };
+                    setHeader('Referer', CIOClipper.Settings.appUrl);
+                    setHeader('Origin', CIOClipper.Settings.appUrl);
+                    return { requestHeaders: details.requestHeaders };
                 },
                 {urls: ["<all_urls>"]},
                 ["requestHeaders", "blocking"]

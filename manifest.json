@@ -3,7 +3,7 @@
 
     "name": "Close.io Lead Clipper",
     "description": "Clip contact data from ANY website and put it straight in your Close.io account.",
-    "version": "1.4.8",
+    "version": "1.4.9",
 
     "permissions": [
         "webRequest",
@@ -14,7 +14,7 @@
         "http://*.close.io/"
     ],
     "browser_action": {
-        "default_icon": "img/icon-available.png",
+        "default_icon": "img/icon-16px.png",
         "default_title": "Close.io Lead Clipper"
     },
 
