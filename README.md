@@ -1,3 +1,7 @@
+Close.io Lead Clipper
+-------------------------
+See the description at https://chrome.google.com/webstore/detail/closeio-lead-clipper/aigklicpjppgjmkjdebbnbddadnhdiop.
+
 Test the extension locally
 -------------------------
 1. `grunt build`
