@@ -76,13 +76,16 @@ function isInUS(location)
 
 //Is a location in the US? Used to choose State Vs. Country in Address fields with 1 comma on LinkedIn.
 
- array = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+var  array = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
   for(var i = 0; i < array.length; i++) 
   {
+
     if(array[i] === location)
     {
+      
       return true;
     }
+
   }
 
   return false; 
@@ -235,9 +238,6 @@ function handleLinkedIn() {
 
     //get all website urls
     var website_urls = $("section.pv-contact-info__contact-type.ci-websites").find("li").toArray();
-
-    //for skype in the future. 
-    //var im_names = $("section.pv-contact-info__contact-type.ci-ims").find("li").toArray();
    
    //get twitter handle for contact
     var twitterHandle = $("section.pv-contact-info__contact-type.ci-twitter").find('a').first().attr("href") || "";
@@ -263,54 +263,43 @@ function handleLinkedIn() {
 
     //description of lead taken from linkedin profile 
     if (description) 
+    {
         lead.description = description;
+    }
 
     //push address to lead
     if (address) 
+    {
         lead.addresses = [{ 'state': state.trim(), 'city': city.trim(), 'country' : country.trim(), 'address_1': address_1.trim() }];
-
-    lead.custom = {
-        source: 'LinkedIn'
-    };
+    }
+    
+    lead.custom = {'source': 'LinkedIn'};
 
     var twitter =  twitterHandle || "";
     var websites = website_urls || "";
     
     //push twitter handle to lead
-    if (twitter) {
+    if (twitter) 
+    {
         lead.contacts[0].urls.push({ 'url': twitter, 'type': 'url' });
     }
 
     //push website url to lead
-    if (websites) {
-        for (var i=0,  len=website_urls.length; i < len; i++) 
+    if (websites) 
+    {
+        for (var i = 0,  len = website_urls.length; i < len; i++) 
         {
             var website_link = $(website_urls[i]).find('a').first().attr("href");
             var website_type = $(website_urls[i]).find('span').first().text().trim();
+
             //if it's a company website, change the url of the main lead
             if(website_type === "(Company Website)")
                 lead.url = website_link;
+
             else
                 lead.contacts[0].urls.push({ 'url': website_link, 'type': 'url' });
         }
     }
-
-    //push skype urls to lead (for the future)
-    // if(im_names)
-    // {
-    //     for (var k=0,  leng=im_names.length; k < leng; k++) 
-    //     {
-    //         var handle = $(im_names[k]).find("span").text();
-    //         var str_open_paren = handle.split('(')[1];
-    //         var platform = str_open_paren.split(')')[0].trim();
-    //         if(platform === "Skype")
-    //         {
-    //             var skype_handle = handle.split('(')[0].trim();
-    //             //lead.contacts[0].urls.push({ 'url': "skype://" + skype_handle, 'type': 'url' });
-    //         }
-            
-    //     }
-    // }
 
     return lead;
 }
