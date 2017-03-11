@@ -71,6 +71,22 @@ function getQueryParam(href, query) {
     }
 }
 
+function isInUS(location)
+{
+
+//Is a location in the US? Used to choose State Vs. Country in Address fields with 1 comma on LinkedIn.
+
+ array = ['Alabama','Alaska','American Samoa','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District of Columbia','Federated States of Micronesia','Florida','Georgia','Guam','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Marshall Islands','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Northern Mariana Islands','Ohio','Oklahoma','Oregon','Palau','Pennsylvania','Puerto Rico','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virgin Island','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+  for(var i = 0; i < array.length; i++) 
+  {
+    if(array[i] === location)
+    {
+      return true;
+    }
+  }
+
+  return false; 
+}
 
 function handleFacebook() {
     // Sample pages to test:
@@ -139,78 +155,162 @@ function handleFacebook() {
 }
 
 function handleLinkedIn() {
-    var posatcom = $("p.title").text().trim().split(" at ");
-    var name = $("span.full-name").text();
 
-    var phone = $("div#phone-view").find('li').first().text().match(/[\+\d\s\-]+/);
+    //open contact panel for contact data
+    //note: Due to a weird linkedin bug, for the panel to be opened via code on successive linkedin leads, without refreshing the browser, the button must be clicked twice. 
+    if($("button.contact-see-more-less.link-without-visited-state").attr("data-control-name") === "contact_see_more")
+    {
+        $("button.contact-see-more-less.link-without-visited-state").click();
+        
+        if($("button.contact-see-more-less.link-without-visited-state").attr("data-control-name") === "contact_see_more")
+            $("button.contact-see-more-less.link-without-visited-state").click();
+    }    
 
+    //Company and position
+    var posatcom = $("div.pv-top-card-section__information.mt3").find("h2").first().text().trim().split(" at ");
+
+    //Name of Contact
+    var name = $("div.pv-top-card-section__information.mt3").find("h1").first().text();
+
+    //*******Description Stuff **************\\
+    //When description is truncated, get full description
+    var description = $("div.truncate-multiline--truncation-target").find("span").first().text().trim() + " " + $("div.truncate-multiline--truncation-target").find("span").last().text().trim();
+    //When the description is not truncated, get full description 
+    if(description === " ")
+    {
+        description = $("div.pv-top-card-section__rich-content.ph2").find("p").first().text().trim();
+        //remove show less from description text
+        description = description.slice(0, -16);
+
+    }
+
+    //For extremely short descriptions
+    else if ($("div.truncate-multiline--truncation-target").find("span").first().text().trim() === $("div.truncate-multiline--truncation-target").find("span").last().text().trim())
+        description = $("div.truncate-multiline--truncation-target").find("span").first().text();
+
+
+   //Get Phone Number from Contact Details
+    var phone = $("section.pv-contact-info__contact-type.ci-phone").find("li").first().text().match(/[\+\d\s\-\.]+/);
     if (phone && phone.length > 0) {
         phone = $.trim(phone[0]);
     }
 
-    // old style ************************************
-    var old_phone;
-    var old_nums = $("li.abook-phone").toArray();
-    if (old_nums.length > 0) {
-        old_phone = old_nums[0].innerText.split(" ")[0];
+    phone = phone || "";
+
+    //Get Email Address From Contact Details
+    var email = $("section.pv-contact-info__contact-type.ci-email").find("span").last().text().trim();
+
+    //parse addresses on linkedin
+    var address_full = document.getElementsByClassName("pv-top-card-section__location Sans-15px-black-55% mb1 inline-block")[0].innerHTML|| "" ;
+    address_full = address_full.replace('Area', '');
+    address_full = address_full.replace('Greater', '');
+    address_full = address_full.trim();
+    var city = "", state = "", country = "", address_1 = "";
+    var address = address_full.split(',');
+
+    if(address.length === 3)
+    {
+        city = address[0];
+        state = address [1];
+        country = address [2];
     }
 
-    var twitterHandle = "";
-    var twitteriframe = $('.twitter-follow-button')[0];
-    if (twitteriframe && twitteriframe.src) {
-        var matches = twitteriframe.src.match(/screen_name=\w+/);
-        if (matches.length > 0) {
-            twitterhandle = matches[0].substr("screen_name=".length);
+    else if(address.length == 2)
+    {
+        if(isInUS(address[1].trim()))
+        {
+            city = address[0];
+            state = address[1]; 
+        }
+
+        else
+        {
+            city = address[0];
+            country = address[1]; 
         }
     }
 
-    var site = $("a[name=overviewsite]").attr('href');
-    site = site? site.slice(20,-13) : '';
-    // **********************************
+    else
+        address_1 = address[0];
 
-    phone = phone || old_phone || "";
-    var email = $("div#email-view").find('a').first().text() || $("li.abook-email").children('a').text() || "";
-    var description = $("p.description").text() || "";
-    var url = $("div#website-view").find('a').first().attr('href') || unescape(site) || "";
-    if (url && url.indexOf('http') !== 0) {
-        url = 'http://linkedin.com' + url;
-    }
-    var address = $("span.locality").children().text() || "";
+    //get all website urls
+    var website_urls = $("section.pv-contact-info__contact-type.ci-websites").find("li").toArray();
+
+    //for skype in the future. 
+    //var im_names = $("section.pv-contact-info__contact-type.ci-ims").find("li").toArray();
+   
+   //get twitter handle for contact
+    var twitterHandle = $("section.pv-contact-info__contact-type.ci-twitter").find('a').first().attr("href") || "";
+
 
     var lead = {};
 
-    if (posatcom[1]) lead.name = posatcom[1];
+    if (posatcom[1]) 
+        lead.name = posatcom[1];
 
     lead.contacts = [
         {
             name: name ? name : null,
-            emails: email ? [{ email: email, type: 'office' }] : [],
-            title: posatcom[0] ? posatcom[0] : null,
-            phones: phone ? [{ phone: phone, type: 'office' }]: [],
+            emails: email ? [{ 'email': email, 'type': 'office' }] : [],
+            title: posatcom[0] ? posatcom [0] : null,
+            phones: phone ? [{ 'phone': phone, 'type': 'office' }]: [],
             urls: []
         }
     ];
+    
+    //url for this lead being created defaults to the linkedin-url if no company website is in contact details
+    lead.url = window.location.href;
 
-    if (url) lead.url = url;
+    //description of lead taken from linkedin profile 
+    if (description) 
+        lead.description = description;
 
-    if (description) lead.description = description;
-
-    if (address) lead.addresses = [{ address_1: address }];
+    //push address to lead
+    if (address) 
+        lead.addresses = [{ 'state': state.trim(), 'city': city.trim(), 'country' : country.trim(), 'address_1': address_1.trim() }];
 
     lead.custom = {
         source: 'LinkedIn'
     };
 
-    var twitter = $("div#twitter-view").find('a').first().text() || twitterHandle || "";
-    var profile = $("dl.public-profile").find('span').text() || $("dl.public-profile").find('a').attr('href') || "";
-    //var industry = $("dd.industry").children().text() || "";
+    var twitter =  twitterHandle || "";
+    var websites = website_urls || "";
     
+    //push twitter handle to lead
     if (twitter) {
-        lead.contacts[0].urls.push({ url: 'https://twitter.com/' + twitter, type: 'url' });
+        lead.contacts[0].urls.push({ 'url': twitter, 'type': 'url' });
     }
-    if (profile) {
-        lead.contacts[0].urls.push({ url: profile, type: 'url' });
+
+    //push website url to lead
+    if (websites) {
+        for (var i=0,  len=website_urls.length; i < len; i++) 
+        {
+            var website_link = $(website_urls[i]).find('a').first().attr("href");
+            var website_type = $(website_urls[i]).find('span').first().text().trim();
+            //if it's a company website, change the url of the main lead
+            if(website_type === "(Company Website)")
+                lead.url = website_link;
+            else
+                lead.contacts[0].urls.push({ 'url': website_link, 'type': 'url' });
+        }
     }
+
+    //push skype urls to lead (for the future)
+    // if(im_names)
+    // {
+    //     for (var k=0,  leng=im_names.length; k < leng; k++) 
+    //     {
+    //         var handle = $(im_names[k]).find("span").text();
+    //         var str_open_paren = handle.split('(')[1];
+    //         var platform = str_open_paren.split(')')[0].trim();
+    //         if(platform === "Skype")
+    //         {
+    //             var skype_handle = handle.split('(')[0].trim();
+    //             //lead.contacts[0].urls.push({ 'url': "skype://" + skype_handle, 'type': 'url' });
+    //         }
+            
+    //     }
+    // }
 
     return lead;
 }
