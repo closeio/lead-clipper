@@ -82,8 +82,7 @@ function isInUS(location)
 
         if(array[i] === location)
         {
-      
-        return true;
+            return true;
         }
 
     }
