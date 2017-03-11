@@ -328,7 +328,7 @@ function handleGitHub() {
 function handleYelp() {
     var url = getQueryParam($('.biz-website a').attr('href'), 'url');
     var lead = {
-        name: $('h1[itemprop="name"]').text().trim(),
+        name: $('h1.biz-page-title.embossed-text-white').text().trim(),
         url: url,
         addresses: [],
         contacts: [
