@@ -358,7 +358,7 @@ function handleYelp() {
         address.city = $('span[itemprop="addressLocality"]').text().trim();
         address.state = $('span[itemprop="addressRegion"]').text().trim();
         address.zipcode = $('span[itemprop="postalCode"]').text().trim();
-        address.country = $('span[itemprop="addressCountry"]').text().trim();
+        address.country = $('meta[itemprop="addressCountry"]').attr("content").trim();
         lead.addresses.push(address);
     }
 
